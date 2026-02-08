@@ -2,25 +2,24 @@ package com.adriane.usermanagement.service.impl;
 
 import com.adriane.usermanagement.model.User;
 import com.adriane.usermanagement.repository.UserRepository;
-import com.adriane.usermanagement.repository.impl.UserRepositoryImpl;
 import com.adriane.usermanagement.service.UserService;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
+@Service
 public class UserServiceImpl implements UserService {
 
-    private final UserRepository userRepository = new UserRepositoryImpl();
+    private final UserRepository userRepository;
 
-    @Override
-    public void addUser(User user) {
-        userRepository.save(user);
+    // ⭐ CONSTRUCTEUR OBLIGATOIRE
+    public UserServiceImpl(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     @Override
-    public User getUser(Long id) {
-        Optional<User> user = userRepository.findById(id);
-        return user.orElse(null);
+    public User addUser(User user) {
+        return userRepository.save(user);
     }
 
     @Override
@@ -29,7 +28,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User getUser(Long id) {
+        return userRepository.findById(id).orElse(null);
+    }
+
+    @Override
     public void deleteUser(Long id) {
-        userRepository.delete(id);
+        userRepository.deleteById(id);
     }
 }
